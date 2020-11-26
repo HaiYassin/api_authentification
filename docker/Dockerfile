@@ -23,4 +23,4 @@ RUN pecl install apcu && docker-php-ext-enable apcu
 # SYMFONY CLI
 RUN wget https://get.symfony.com/cli/installer -O - | bash && mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
-WORKDIR /var/www
+WORKDIR /var/www/project
