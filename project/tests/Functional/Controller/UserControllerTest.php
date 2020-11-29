@@ -2,6 +2,7 @@
 
 namespace App\Tests\Functional\Controller;
 
+use App\Entity\Token;
 use App\Entity\User;
 use App\Service\Helper\JsonResponseHelper;
 use App\Service\UserService;
@@ -49,6 +50,9 @@ class UserControllerTest extends WebTestCase
         self::$em->getConnection()->rollBack();
     }
 
+    /**
+     * @group testSuccessRegisterAction
+     */
     public function testSuccessRegisterAction()
     {
         $client = static::$client;
@@ -69,6 +73,9 @@ class UserControllerTest extends WebTestCase
         $this->assertEquals(JsonResponseHelper::SUCCESS_EMAIL_WAS_SENT, $request->getContent());
     }
 
+    /**
+     * @group testErrorRegisterWithEmptyData
+     */
     public function testErrorRegisterWithEmptyData()
     {
         $client = static::$client;
@@ -85,6 +92,9 @@ class UserControllerTest extends WebTestCase
         $this->assertEquals(JsonResponseHelper::ERROR_ON_DATA, $request->getContent());
     }
 
+    /**
+     * @group testSuccessValidationUser
+     */
     public function testSuccessValidationUser()
     {
         $client = static::$client;
@@ -94,10 +104,11 @@ class UserControllerTest extends WebTestCase
 
         $user = $users[0];
 
-        $user
-            ->setCreatedAt(new \DateTime('now'))
-            ->setEnabled(new \DateTime('now'))
-        ;
+        /** @var Token $token */
+        $token = self::$em->getRepository(Token::class)->findOneBy(['user' => $user->getId()]);
+        $token->setCreateAt(new \DateTime('now'));
+
+        $user->setEnabled(new \DateTime('now'));
 
         self::$em->persist($user);
         self::$em->flush();
@@ -115,6 +126,9 @@ class UserControllerTest extends WebTestCase
 
     }
 
+    /**
+     * @group testErrorValidationUser
+     */
     public function testErrorValidationUser()
     {
         $client = static::$client;
