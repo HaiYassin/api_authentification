@@ -75,8 +75,13 @@ class UserService
      */
     public function enableUser(User $user)
     {
+        if ($this->isUserAlreadyValidated($user)) {
+            return false;
+        }
+
+        $tokenCreateAt = $user->getTokens()->first()->getCreateAt();
         $dateTimeNow = $this->dateTimeHelper->getNowDateTime();
-        $dateInterval = $this->dateTimeHelper->getDateInterval($user->getCreatedAt(), $dateTimeNow);
+        $dateInterval = $this->dateTimeHelper->getDateInterval($tokenCreateAt, $dateTimeNow);
 
         if(!$this->checkRuleOnDateInterval($dateInterval)) {
             return false;
@@ -117,5 +122,15 @@ class UserService
     private function isGranderThan(int $time): bool
     {
         return ($time > self::ONE) ? true : false;
+    }
+
+    private function isUserAlreadyValidated(User $user) {
+        $tokenStatus = $user->getTokens()->first()->getValidateAt();
+
+        if (empty($user->getUpdatedAt()) || empty($tokenStatus)){
+            return false;
+        }
+
+        return true;
     }
 }
