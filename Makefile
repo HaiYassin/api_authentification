@@ -52,6 +52,9 @@ app-dsu-f:
 app-doctrine-migration:
 	$(EXEC_WWW) php bin/console doctrine:migration:migrate --no-interaction
 
+app-load-fixtures:
+	$(EXEC_WWW) php bin/console doctrine:fixtures:load
+
 ##########################
 
 # PHPUNIT
