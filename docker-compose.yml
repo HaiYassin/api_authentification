@@ -9,7 +9,8 @@ services:
     volumes:
       - db-data:/var/lib/mysql
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_USER: root
+      MYSQL_DATABASE: api_auth
     networks:
       - dev
 
