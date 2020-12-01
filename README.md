@@ -84,7 +84,7 @@ You have to build the project with this command :
         
         `composer update`
     
-    - Create Database : 
+    - Create Database (by default the Database is already exist in the docker container, please to skip to 5th step) : 
         
         `php bin/console doctrine:database:create`
 
